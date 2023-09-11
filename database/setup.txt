@@ -1,0 +1,2 @@
+//start db
+docker run --name TF_Database -p 5432:5432 database 
