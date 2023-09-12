@@ -1,9 +1,9 @@
 <template>
-  <div class="pt-5 space-y-5">
-    <h1>TF Astronauts</h1>
-    <p>
-      This is the header and description
-    </p>
+  <div class="p-10 space-y-5 flex flex-col text-center" >
+      <h1>TF Astronauts</h1>
+      <p>
+        This is the header and description
+      </p>
   </div>
  
 
