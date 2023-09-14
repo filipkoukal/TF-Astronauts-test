@@ -23,4 +23,27 @@ router.get("/astronauts", async (req, res) => {
     }
 })
 
+// Create new astronaut
+router.post("/create_astronaut", async (req, res) => {
+    try {
+        const {first_name, last_name, date_of_birth, superpower} = req.body
+        const astronaut = await Astronaut.create({first_name, last_name, date_of_birth, superpower});
+        res.json(astronaut)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
+
+// Create new astronaut
+router.delete("/delete_astronaut/:id", async (req, res) => {
+    try {
+        const astronaut_id = req.params.id;
+        const astronaut = await Astronaut.findOne({where: { id: astronaut_id } });
+        await astronaut.destroy();
+        res.status(200).json(astronaut);    
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
+
 module.exports = router

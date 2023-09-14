@@ -1,5 +1,5 @@
 <template>
-    <tr class="hover:bg-gray-100 group">
+    <tr class="hover:bg-gray-100 group cursor-pointer">
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{{astronaut.first_name}}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{ astronaut.last_name }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{astronaut.date_of_birth}}</td>
