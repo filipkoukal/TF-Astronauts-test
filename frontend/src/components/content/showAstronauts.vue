@@ -1,7 +1,7 @@
 <template>
 
 
-<div class="p-10 space-y-5 flex justify-center" v-if="astronauts">
+<div class="p-10 space-y-5 flex justify-center" v-if="astronauts.length != 0">
   <div class="grid justify-items-end flex flex-col">
     <CreateButton class="pb-2 "/>
     <div class="flex  flex-col">
@@ -63,7 +63,7 @@
       -->
 
 
-<AstronautModal ref="astroModal"/>
+<AstronautModal ref="astroModal" @refreshList="refreshList"/>
 
 </template>
 
@@ -94,6 +94,39 @@ export default {
     methods:{
       toggleModal(astronaut){
         this.$refs.astroModal.onToggle(astronaut);
+      },
+      refreshList(){
+        this.axios.get(api.GET_ASTRONAUTS).then((response) => {
+            let new_astronauts = response.data
+            let new_ids = new_astronauts.map(new_astro=>new_astro.id)
+            let old_ids = this.astronauts.map(old_astro=>old_astro.id)
+            let ids_to_del = old_ids.filter(n => !new_ids.includes(n))
+
+
+            const recursiveFindIndex = (data, id) =>
+              data.reduce((indexes, item, index) => {
+                let subIndex;
+
+                Array.isArray(item) && (subIndex = recursiveFindIndex(item, id));
+
+                if (subIndex && subIndex.length) {
+                  return indexes.concat([index], subIndex);
+                }
+
+                item.id === id && (indexes.push(index));
+
+                return indexes;
+              }, []);
+
+            ids_to_del.forEach(id => {
+              let index = recursiveFindIndex(this.astronauts, id)
+              this.astronauts.splice(index, 1);
+            });
+            console.log(this.astronauts)
+            })
+
+      
+
       }
     },
     computed: {

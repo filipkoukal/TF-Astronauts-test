@@ -2,7 +2,7 @@
       <Transition name="fade">
         <div v-if="isModalVisible">
           <div @click="onToggle" class="absolute bg-black opacity-20 inset-0 z-0"></div>
-            <div ref="astroModal" class="w-full max-w-lg p-3 mx-auto my-auto rounded-xl shadow-lg bg-white fixed top-1/4 left-0 right-0 z-50">
+            <div class="w-full max-w-lg p-3 mx-auto my-auto rounded-xl shadow-lg bg-white fixed top-1/4 left-0 right-0 z-30">
             <div>
                 <!-- x button -->
                 <div class="absolute top-5 right-5">
@@ -69,19 +69,27 @@
                 <button class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
                   Edit
                 </button>
-                <button @click="onToggle" class="mb-2 md:mb-0 bg-purple-500 border border-purple-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-purple-600">
-                  Close
+                <button @click="deleteAstro" class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
+                  Delete
                 </button>
               </div>
             </div>
           </div>
         </div>
     </Transition>
+
+  <DeleteAstronautModal ref="deleteAstroModal" @deletedAstronaut="deletedAstronaut"/>
 </template>
   
-  <script>
+<script>
+import DeleteAstronautModal from "./deleteAstronautModal.vue"
+
   export default {
     name: "AstronautModal",
+    emits: ["refreshList"],
+    components: {
+      DeleteAstronautModal
+    },
     data() {
       return {
         isOpen: false,
@@ -99,6 +107,13 @@
       onToggle(astronaut) {
         this.isOpen = !this.isOpen;
         this.astronaut = astronaut
+      },
+      deleteAstro(){
+        this.$refs.deleteAstroModal.onToggle(this.astronaut);
+      },
+      deletedAstronaut(){
+        this.isOpen = !this.isOpen;
+        this.$emit("refreshList")
       }
     }
   };

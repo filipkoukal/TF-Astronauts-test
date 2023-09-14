@@ -34,5 +34,16 @@ router.post("/create_astronaut", async (req, res) => {
     }
 })
 
+// Create new astronaut
+router.delete("/delete_astronaut/:id", async (req, res) => {
+    try {
+        const astronaut_id = req.params.id;
+        const astronaut = await Astronaut.findOne({where: { id: astronaut_id } });
+        await astronaut.destroy();
+        res.status(200).json(astronaut);    
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
 
 module.exports = router
