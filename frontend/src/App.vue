@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white h-screen w-screen text-gray-500 m-0">
     <Header msg="Welcome to Your Vue.js App" />
-    <component class="" :is="getActiveViewComponent" />
+    <component :is="getActiveViewComponent" />
     <!--<Footer />-->
   </div>
 </template>

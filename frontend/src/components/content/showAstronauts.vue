@@ -2,6 +2,7 @@
 
 
 <div class="p-10 space-y-5 flex justify-center " v-if="astronauts">
+  <CreateButton/>
   <div class="flex flex-col">
   <div class="-m-1.5 overflow-x-auto">
     <div class="p-1.5 min-w-full inline-block align-middle">
@@ -19,7 +20,7 @@
             </thead>
 
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-              <AstronautRow v-bind:astronaut="astronaut" v-for="astronaut in astronauts" :key="astronaut.id"/>
+              <AstronautRow @click="toggleModal(astronaut)" v-bind:astronaut="astronaut" v-for="astronaut in astronauts" :key="astronaut.id"/>
             </tbody>
           </table>
 
@@ -33,14 +34,14 @@
     <p class="font-bold">
       There are no astronauts in the database!
     </p>
-    <p class="">
+    <p>
       You can start by creating a new astronaut. Press the button below to create a new astronaut!
     </p>
     <!-- TODO: button -->
   </div>
 </div>
 
-
+<!-- TODO: pagination -->
         <!-- pagination
         <div class="py-1 px-4">
           <nav class="flex items-center space-x-2">
@@ -60,7 +61,7 @@
       -->
 
 
-
+<AstronautModal ref="astroModal"/>
 
 </template>
 
@@ -73,11 +74,15 @@
 <script>
 import * as api from "../../constants/api";
 import AstronautRow from "./astronautRow.vue"
+import AstronautModal from "./astronautModal.vue"
+import CreateButton from "./createAstronautButton.vue"
 
 export default {
     name: "ShowAstronauts",
     components: {
       AstronautRow,
+      AstronautModal,
+      CreateButton
     },
     data(){
       return{
@@ -85,6 +90,9 @@ export default {
       }
     },
     methods:{
+      toggleModal(astronaut){
+        this.$refs.astroModal.onToggle(astronaut);
+      }
     },
     computed: {
 
