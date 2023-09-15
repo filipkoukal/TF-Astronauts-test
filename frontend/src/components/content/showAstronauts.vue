@@ -104,27 +104,22 @@ export default {
 
 
             const recursiveFindIndex = (data, id) =>
-              data.reduce((indexes, item, index) => {
-                let subIndex;
-
-                Array.isArray(item) && (subIndex = recursiveFindIndex(item, id));
-
-                if (subIndex && subIndex.length) {
-                  return indexes.concat([index], subIndex);
-                }
-
-                item.id === id && (indexes.push(index));
+                data.reduce((indexes, item, index) => {
+                    let subIndex;
+                    Array.isArray(item) && (subIndex = recursiveFindIndex(item, id));
+                    if (subIndex && subIndex.length) {
+                        return indexes.concat([index], subIndex);
+                    }
+                    item.id === id && (indexes.push(index));
 
                 return indexes;
-              }, []);
+            }, []);
 
             ids_to_del.forEach(id => {
               let index = recursiveFindIndex(this.astronauts, id)
               this.astronauts.splice(index, 1);
             });
-            console.log(this.astronauts)
             })
-
       
 
       }

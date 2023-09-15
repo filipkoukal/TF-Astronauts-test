@@ -2,13 +2,11 @@
   <div class="bg-white h-screen w-screen text-gray-500 m-0">
     <Header msg="Welcome to Your Vue.js App" />
     <component :is="getActiveViewComponent" />
-    <!--<Footer />-->
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
 import ShowAstronauts from "./components/content/showAstronauts.vue";
 
 import * as appView from "./constants/appView";
@@ -19,7 +17,6 @@ export default {
   name: "App",
   components: {
     Header,
-    Footer,
     ShowAstronauts
   },
   data:() => {
