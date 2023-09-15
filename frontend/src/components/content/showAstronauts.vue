@@ -3,7 +3,7 @@
 
 <div class="p-10 space-y-5 flex justify-center" v-if="astronauts.length != 0">
   <div class="grid justify-items-end flex flex-col">
-    <CreateButton class="pb-2 "/>
+    <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
     <div class="flex  flex-col">
       <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
@@ -38,7 +38,7 @@
     <p>
       You can start by creating a new astronaut. Press the button below to create a new astronaut!
     </p>
-    <CreateButton class="pb-2 "/>
+    <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
     <!-- TODO: button -->
   </div>
 </div>
@@ -62,8 +62,8 @@
         </div>
       -->
 
-
 <AstronautModal ref="astroModal" @refreshList="refreshList"/>
+<CreateAstronautModal ref="createAstroModal"/>
 
 </template>
 
@@ -78,13 +78,15 @@ import * as api from "../../constants/api";
 import AstronautRow from "./astronautRow.vue"
 import AstronautModal from "./astronautModal.vue"
 import CreateButton from "./createAstronautButton.vue"
+import CreateAstronautModal from "./createAstronautModal.vue"
 
 export default {
     name: "ShowAstronauts",
     components: {
       AstronautRow,
       AstronautModal,
-      CreateButton
+      CreateButton,
+      CreateAstronautModal
     },
     data(){
       return{
@@ -94,6 +96,9 @@ export default {
     methods:{
       toggleModal(astronaut){
         this.$refs.astroModal.onToggle(astronaut);
+      },
+      toggleCreateAstroModal(){
+        this.$refs.createAstroModal.onToggle();
       },
       refreshList(){
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {

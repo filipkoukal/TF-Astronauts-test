@@ -1,5 +1,5 @@
 CREATE TABLE "Astronaut" (
-    "id" INTEGER NOT NULL,
+    "id" SERIAL PRIMARY KEY,
 	"first_name" VARCHAR(20) NOT NULL,
 	"last_name" VARCHAR(20) NOT NULL,
 	"date_of_birth" DATE NOT NULL,
@@ -11,3 +11,4 @@ INSERT INTO "Astronaut" ("id", "first_name", "last_name", "date_of_birth", "supe
 	('1', 'Karel', 'Kadlec', '1983-06-23', 'Furry'),
 	('2', 'Honza', 'Tichý', '2000-12-01', 'Femboy'),
 	('3', 'Janek', 'Druhý', '1999-9-14', 'Can eat banana the long way ');
+

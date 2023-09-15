@@ -13,18 +13,11 @@
 </template>
 
 <script>
-import * as api from "../../constants/api";
 
 export default {
     name: "CreateButton",
 
     methods:{
-        // TODO: make function work
-        createAstronaut(){
-            this.axios.post(api.CREATE_ASTRONAUT).then((response) => {
-                this.astronauts = response.data
-                })
-        }
     },
     computed: {
 
