@@ -34,7 +34,32 @@ router.post("/create_astronaut", async (req, res) => {
     }
 })
 
-// Create new astronaut
+// Edit existing astronaut
+router.put("/edit_astronaut/:id", async (req, res) => {
+    try {
+        const astronaut_id = req.params.id;
+        const { first_name, last_name, date_of_birth, superpower } = req.body
+
+        const oldAstro = await Astronaut.findOne({where: { id: astronaut_id }});
+        await Astronaut.update({
+            first_name: first_name || oldAstro.first_name,
+            last_name: last_name || oldAstro.last_name,
+            date_of_birth: date_of_birth || oldAstro.date_of_birth,
+            superpower: superpower || oldAstro.superpower
+        }, {
+            where: {
+                id: astronaut_id
+            }
+        });
+
+        const updatedAstro = await Astronaut.findOne({where: { id: astronaut_id }});
+        res.status(200).json(updatedAstro);    
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
+
+// Delete astronaut
 router.delete("/delete_astronaut/:id", async (req, res) => {
     try {
         const astronaut_id = req.params.id;
