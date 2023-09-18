@@ -3,7 +3,7 @@
 
 <div class="p-10 space-y-5 flex justify-center" v-if="astronauts.length != 0">
   <div class="grid justify-items-end flex flex-col">
-    <CreateButton class="pb-2 "/>
+    <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
     <div class="flex  flex-col">
       <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
@@ -38,7 +38,7 @@
     <p>
       You can start by creating a new astronaut. Press the button below to create a new astronaut!
     </p>
-    <CreateButton class="pb-2 "/>
+    <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
     <!-- TODO: button -->
   </div>
 </div>
@@ -62,8 +62,8 @@
         </div>
       -->
 
-
 <AstronautModal ref="astroModal" @refreshList="refreshList"/>
+<CreateAstronautModal ref="createAstroModal" @refreshList="refreshList"/>
 
 </template>
 
@@ -78,13 +78,16 @@ import * as api from "../../constants/api";
 import AstronautRow from "./astronautRow.vue"
 import AstronautModal from "./astronautModal.vue"
 import CreateButton from "./createAstronautButton.vue"
+import CreateAstronautModal from "./createAstronautModal.vue"
+import { recursiveFindIndex, recursiveFindItem } from "../../helpers/generalHelper.js"
 
 export default {
     name: "ShowAstronauts",
     components: {
       AstronautRow,
       AstronautModal,
-      CreateButton
+      CreateButton,
+      CreateAstronautModal
     },
     data(){
       return{
@@ -95,33 +98,28 @@ export default {
       toggleModal(astronaut){
         this.$refs.astroModal.onToggle(astronaut);
       },
+      toggleCreateAstroModal(){
+        this.$refs.createAstroModal.onToggle();
+      },
       refreshList(){
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {
             let new_astronauts = response.data
             let new_ids = new_astronauts.map(new_astro=>new_astro.id)
             let old_ids = this.astronauts.map(old_astro=>old_astro.id)
             let ids_to_del = old_ids.filter(n => !new_ids.includes(n))
-
-
-            const recursiveFindIndex = (data, id) =>
-                data.reduce((indexes, item, index) => {
-                    let subIndex;
-                    Array.isArray(item) && (subIndex = recursiveFindIndex(item, id));
-                    if (subIndex && subIndex.length) {
-                        return indexes.concat([index], subIndex);
-                    }
-                    item.id === id && (indexes.push(index));
-
-                return indexes;
-            }, []);
+            let ids_to_add = new_ids.filter(n => !old_ids.includes(n))
 
             ids_to_del.forEach(id => {
               let index = recursiveFindIndex(this.astronauts, id)
               this.astronauts.splice(index, 1);
             });
-            })
-      
 
+            ids_to_add.forEach(id => {
+              let new_astro = recursiveFindItem(new_astronauts, id)
+              this.astronauts.push(new_astro[0]);
+            });
+
+            })
       }
     },
     computed: {

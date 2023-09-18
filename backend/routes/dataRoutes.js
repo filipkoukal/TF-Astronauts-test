@@ -27,8 +27,12 @@ router.get("/astronauts", async (req, res) => {
 router.post("/create_astronaut", async (req, res) => {
     try {
         const {first_name, last_name, date_of_birth, superpower} = req.body
-        const astronaut = await Astronaut.create({first_name, last_name, date_of_birth, superpower});
-        res.json(astronaut)
+        if (first_name && last_name && date_of_birth && superpower) {
+            const astronaut = await Astronaut.create({first_name, last_name, date_of_birth, superpower});
+            res.status(200).json(astronaut)
+        } else {
+            res.status(500).json({message: "invalid inputs"})
+        }
     } catch (error) {
         res.status(500).json({message: error.message})
     }
