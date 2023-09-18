@@ -49,7 +49,7 @@
                                 Date of Birth
                             </label>
                             <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 " v-if="!isEdit">
-                                {{ astronaut.date_of_birth }}
+                                {{ formatTime(astronaut.date_of_birth, ". ") }}
                             </p>
                             <input v-model="edited_astronaut.date_of_birth" type="date" :class="{'border-red-500':editFillErrors.date_of_birth}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
                             <label v-if="isEdit && editFillErrors.date_of_birth" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
@@ -102,6 +102,7 @@
 <script>
 import * as api from "../../constants/api";
 import DeleteAstronautModal from "./deleteAstronautModal.vue"
+import { formatTimePretty } from "../../helpers/generalHelper.js"
 
   export default {
     name: "AstronautModal",
@@ -140,7 +141,6 @@ import DeleteAstronautModal from "./deleteAstronautModal.vue"
         this.isOpen = !this.isOpen;
         this.isEdit = false
         this.astronaut = astronaut;
-
       },
       deleteAstro(){
         this.$refs.deleteAstroModal.onToggle(this.astronaut);
@@ -196,6 +196,9 @@ import DeleteAstronautModal from "./deleteAstronautModal.vue"
                       this.editModeToggle()
                   }) 
         }
+      },
+      formatTime(time, delimeter){
+        return formatTimePretty(time, delimeter);
       }
     },
   };

@@ -22,6 +22,5 @@ app.listen(3000, async () => {
             type: sequelize.QueryTypes.SELECT
         })
     
-    console.log("DB connected")
-    console.log("Server ready!")
+    console.log("Server ready! DB connected")
 })    // pokud se uspěšně spustí server
