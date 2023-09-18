@@ -63,7 +63,7 @@
       -->
 
 <AstronautModal ref="astroModal" @refreshList="refreshList"/>
-<CreateAstronautModal ref="createAstroModal"/>
+<CreateAstronautModal ref="createAstroModal" @refreshList="refreshList"/>
 
 </template>
 
@@ -79,6 +79,7 @@ import AstronautRow from "./astronautRow.vue"
 import AstronautModal from "./astronautModal.vue"
 import CreateButton from "./createAstronautButton.vue"
 import CreateAstronautModal from "./createAstronautModal.vue"
+import { recursiveFindIndex, recursiveFindItem } from "../../helpers/generalHelper.js"
 
 export default {
     name: "ShowAstronauts",
@@ -106,24 +107,18 @@ export default {
             let new_ids = new_astronauts.map(new_astro=>new_astro.id)
             let old_ids = this.astronauts.map(old_astro=>old_astro.id)
             let ids_to_del = old_ids.filter(n => !new_ids.includes(n))
-
-
-            const recursiveFindIndex = (data, id) =>
-                data.reduce((indexes, item, index) => {
-                    let subIndex;
-                    Array.isArray(item) && (subIndex = recursiveFindIndex(item, id));
-                    if (subIndex && subIndex.length) {
-                        return indexes.concat([index], subIndex);
-                    }
-                    item.id === id && (indexes.push(index));
-
-                return indexes;
-            }, []);
+            let ids_to_add = new_ids.filter(n => !old_ids.includes(n))
 
             ids_to_del.forEach(id => {
               let index = recursiveFindIndex(this.astronauts, id)
               this.astronauts.splice(index, 1);
             });
+
+            ids_to_add.forEach(id => {
+              let new_astro = recursiveFindItem(new_astronauts, id)
+              this.astronauts.push(new_astro[0]);
+            });
+
             })
       
 

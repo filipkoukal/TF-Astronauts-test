@@ -149,6 +149,7 @@ import * as api from "../../constants/api";
                       superpower: this.new_astronaut.superpower,
                   }).then(() => {
                       this.onToggle() 
+                      this.$emit("refreshList");
                   }) 
         }
       }
