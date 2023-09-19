@@ -6,7 +6,7 @@
             <div>
                 <!-- x button -->
                 <div class="absolute top-5 right-5">
-                    <button @click="onToggle" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <button @click="onToggle" type="button" class="transition duration-150 ease-out hover:ease-in text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
                         <i class="pi pi-times"></i>
                     </button>
                 </div>
@@ -22,7 +22,7 @@
                                 First name
                             </label>
     
-                            <input v-model="new_astronaut.first_name" type="text"  :class="{'border-red-500':fillErrors.first_name}"  class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input maxlength="20" v-model="new_astronaut.first_name" type="text"  :class="{'border-red-500':fillErrors.first_name}"  class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <label v-if="fillErrors.first_name" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
                         </div>
 
@@ -31,7 +31,7 @@
                             <label class="text-xs font-medium text-gray-500 uppercase">
                                 Last name
                             </label>
-                            <input v-model="new_astronaut.last_name" type="text" :class="{'border-red-500':fillErrors.last_name}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input maxlength="20" v-model="new_astronaut.last_name" type="text" :class="{'border-red-500':fillErrors.last_name}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <label v-if="fillErrors.last_name" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
 
                         </div>
@@ -39,7 +39,7 @@
 
                     <div class="flex-1  flex flex-row">
                     <!-- dob -->
-                        <div id="modal-first-name" class="flex flex-col flex-1 px-6 py-3 text-left ">
+                        <div maxlength="20" id="modal-first-name" class="flex flex-col flex-1 px-6 py-3 text-left ">
                             <label class="text-xs font-medium text-gray-500 uppercase">
                                 Date of Birth
                             </label>
@@ -49,7 +49,7 @@
                         </div>
 
                         <!-- superpower -->
-                        <div id="modal-last-name" class="flex flex-col flex-1 px-6 py-3 text-left ">
+                        <div maxlength="200" id="modal-last-name" class="flex flex-col flex-1 px-6 py-3 text-left ">
                             <label class="text-xs font-medium text-gray-500 uppercase">
                                 Superpower
                             </label>
@@ -66,10 +66,10 @@
 
               </div>
               <div class="p-3 mt-2 text-right space-x-4 md:block" >
-                  <button @click="confirmAdd" class="mb-2 md:mb-0 bg-green-500 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-green-600">
+                  <button @click="confirmAdd" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-green-500 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-green-600">
                     Create
                   </button>
-                  <button @click="onToggle" class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
+                  <button @click="onToggle" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
                     Cancel
                   </button>
               </div>
@@ -114,7 +114,10 @@ import * as api from "../../constants/api";
       onToggle() {
         this.isOpen = !this.isOpen;
         this.resetErrors()
-
+        this.new_astronaut.first_name = ""
+        this.new_astronaut.last_name = ""
+        this.new_astronaut.date_of_birth = ""
+        this.new_astronaut.superpower = ""
       },
       checkValidity(){
         this.resetErrors()
