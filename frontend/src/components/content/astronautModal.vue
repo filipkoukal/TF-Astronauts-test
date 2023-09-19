@@ -6,7 +6,7 @@
             <div>
                 <!-- x button -->
                 <div class="absolute top-5 right-5">
-                    <button @click="onToggle" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <button @click="onToggle" type="button" class="transition duration-150 ease-out hover:ease-in text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
                         <i class="pi pi-times"></i>
                     </button>
                 </div>
@@ -21,22 +21,22 @@
                             <label class="text-xs font-medium text-gray-500 uppercase">
                                 First name
                             </label>
-                            <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 " v-if="!isEdit">
+                            <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 break-all" v-if="!isEdit">
                                 {{ astronaut.first_name }}
                             </p>
-                            <input v-model="edited_astronaut.first_name" type="text"  :class="{'border-red-500':editFillErrors.first_name}"  class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
+                            <input maxlength="20" v-model="edited_astronaut.first_name" type="text"  :class="{'border-red-500':editFillErrors.first_name}"  class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
                             <label v-if="isEdit && editFillErrors.first_name" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
                         </div>
 
                         <!-- last name -->
                         <div id="modal-last-name" class="flex flex-col flex-1 px-6 py-3 text-left ">
-                            <label class="text-xs font-medium text-gray-500 uppercase">
+                            <label class="text-xs font-medium text-gray-500 uppercase ">
                                 Last name
                             </label>
-                            <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 " v-if="!isEdit">
+                            <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 break-all" v-if="!isEdit">
                                 {{ astronaut.last_name }}
                             </p>
-                            <input v-model="edited_astronaut.last_name" type="text" :class="{'border-red-500':editFillErrors.last_name}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
+                            <input maxlength="20" v-model="edited_astronaut.last_name" type="text" :class="{'border-red-500':editFillErrors.last_name}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
                             <label v-if="isEdit && editFillErrors.last_name" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
 
                         </div>
@@ -51,7 +51,7 @@
                             <p class="py-2 whitespace-nowrap text-m font-medium text-gray-800 " v-if="!isEdit">
                                 {{ formatTime(astronaut.date_of_birth, ". ") }}
                             </p>
-                            <input v-model="edited_astronaut.date_of_birth" type="date" :class="{'border-red-500':editFillErrors.date_of_birth}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
+                            <input maxlength="20" v-model="edited_astronaut.date_of_birth" type="date" :class="{'border-red-500':editFillErrors.date_of_birth}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
                             <label v-if="isEdit && editFillErrors.date_of_birth" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
                         </div>
 
@@ -60,10 +60,10 @@
                             <label class="text-xs font-medium text-gray-500 uppercase">
                                 Superpower
                             </label>
-                            <p class="py-2  text-m font-medium text-gray-800 " v-if="!isEdit"> 
+                            <p class="py-2  text-m font-medium text-gray-800 break-all " v-if="!isEdit"> 
                                 {{ astronaut.superpower }}
                             </p>
-                            <input v-model="edited_astronaut.superpower" type="text" :class="{'border-red-500':editFillErrors.superpower}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
+                            <input maxlength="200" v-model="edited_astronaut.superpower" type="text" :class="{'border-red-500':editFillErrors.superpower}" class="p-2 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-else>
                             <label v-if="isEdit && editFillErrors.superpower" class="text-xs font-medium text-red-500 uppercase">Required field!</label>
 
                         </div>
@@ -76,18 +76,18 @@
 
               </div>
               <div class="p-3 mt-2 text-right space-x-4 md:block" v-if="!isEdit">
-                  <button @click="editModeToggle" class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
+                  <button @click="editModeToggle" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
                     Edit
                   </button>
-                  <button @click="deleteAstro" class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
+                  <button @click="deleteAstro" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
                     Delete
                   </button>
               </div>
               <div class="p-3 mt-2 text-right space-x-4 md:block" v-else>
-                  <button @click="confirmEdit" class="mb-2 md:mb-0 bg-blue-500 border border-blue-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-blue-600">
+                  <button @click="confirmEdit" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-blue-500 border border-blue-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-blue-600">
                     Confirm
                   </button>
-                  <button @click="editModeToggle" class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
+                  <button @click="editModeToggle" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
                     Cancel
                   </button>
               </div>

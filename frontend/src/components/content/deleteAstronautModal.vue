@@ -20,10 +20,10 @@
 
             </div>
             <div class="p-3 mt-2 text-center space-x-4 md:block">
-            <button @click="deleteAstronaut" class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
+            <button @click="deleteAstronaut" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-md hover:shadow-lg hover:bg-red-600">
                 Yes
               </button>
-              <button @click="onToggle" class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
+              <button @click="onToggle" class="transition duration-150 ease-out hover:ease-in mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100">
                 No
               </button>
             </div>

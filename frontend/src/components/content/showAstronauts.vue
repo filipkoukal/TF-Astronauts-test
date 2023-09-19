@@ -1,10 +1,10 @@
 <template>
 
 
-<div class="p-10 space-y-5 flex justify-center" v-if="astronauts.length != 0">
-  <div class="grid justify-items-end flex flex-col">
+<div class="p-10 space-y-5 flex justify-center " v-if="astronauts.length != 0">
+  <div class="grid justify-items-end flex flex-col ">
     <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
-    <div class="flex  flex-col">
+    <div class="flex flex-col">
       <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
           <div class="border rounded-lg overflow-hidden dark:border-gray-700">
@@ -21,11 +21,29 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                  <AstronautRow @click="toggleModal(astronaut)" v-bind:astronaut="astronaut" v-for="astronaut in astronauts" :key="astronaut.id"/>
+                  <AstronautRow @click="toggleModal(astronaut)" v-bind:astronaut="astronaut" v-for="astronaut in astronauts" :key="astronaut.id" :class="{hidden : astro_id_to_page[astronaut.id] != active_page}"/>
                 </tbody>
               </table>
+
           </div>
-        </div>
+
+          <!-- pagination -->
+            <div class="py-1 px-4 w-full grid justify-items-center	">
+              <nav class="flex items-center space-x-2">
+                <a @click="pageBackward" class="text-gray-400 hover:text-blue-600 p-4 inline-flex items-center gap-2 font-medium rounded-md transition duration-300 ease-out hover:ease-in" href="#">
+                  <span aria-hidden="true">«</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a v-for="n in parseInt(num_pages)" @click="changePage(n)" :key="n" :class="{'bg-blue-500 text-white': n-1 == active_page, 'text-gray-400 hover:text-blue-600': n-1 != active_page}" class="w-10 h-10 p-4 inline-flex items-center text-sm font-medium rounded-full transition duration-300 ease-out hover:ease-in " href="#">{{ n }}</a>
+                <a @click="pageForward" class="text-gray-400 hover:text-blue-600 p-4 inline-flex items-center gap-2 font-medium rounded-md transition duration-300 ease-out hover:ease-in" href="#">
+                  <span class="sr-only">Next</span>
+                  <span aria-hidden="true">»</span>                
+                </a>
+              </nav>
+            </div>
+
+
+          </div>
       </div>
     </div>
   </div>
@@ -39,28 +57,11 @@
       You can start by creating a new astronaut. Press the button below to create a new astronaut!
     </p>
     <CreateButton @click="toggleCreateAstroModal()" class="pb-2 "/>
-    <!-- TODO: button -->
   </div>
 </div>
 
-<!-- TODO: pagination -->
-        <!-- pagination
-        <div class="py-1 px-4">
-          <nav class="flex items-center space-x-2">
-            <a class="text-gray-400 hover:text-blue-600 p-4 inline-flex items-center gap-2 font-medium rounded-md" href="#">
-              <span aria-hidden="true">«</span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="w-10 h-10 bg-blue-500 text-white p-4 inline-flex items-center text-sm font-medium rounded-full" href="#" aria-current="page">1</a>
-            <a class="w-10 h-10 text-gray-400 hover:text-blue-600 p-4 inline-flex items-center text-sm font-medium rounded-full" href="#">2</a>
-            <a class="w-10 h-10 text-gray-400 hover:text-blue-600 p-4 inline-flex items-center text-sm font-medium rounded-full" href="#">3</a>
-            <a class="text-gray-400 hover:text-blue-600 p-4 inline-flex items-center gap-2 font-medium rounded-md" href="#">
-              <span class="sr-only">Next</span>
-              <span aria-hidden="true">»</span>
-            </a>
-          </nav>
-        </div>
-      -->
+
+
 
 <AstronautModal ref="astroModal" @refreshList="refreshList"/>
 <CreateAstronautModal ref="createAstroModal" @refreshList="refreshList"/>
@@ -92,6 +93,10 @@ export default {
     data(){
       return{
         astronauts: [],
+        max_rows: 4,
+        astro_id_to_page:{},
+        active_page: 0,
+        num_pages: 0
       }
     },
     methods:{
@@ -109,17 +114,46 @@ export default {
             let ids_to_del = old_ids.filter(n => !new_ids.includes(n))
             let ids_to_add = new_ids.filter(n => !old_ids.includes(n))
 
+            // delete removed astros from list
             ids_to_del.forEach(id => {
               let index = recursiveFindIndex(this.astronauts, id)
               this.astronauts.splice(index, 1);
             });
 
+            // add new astros to list
             ids_to_add.forEach(id => {
               let new_astro = recursiveFindItem(new_astronauts, id)
               this.astronauts.push(new_astro[0]);
             });
 
+            // refresh page list and check if last page is empty
+            this.assignAstrosToPages()
+            if (this.active_page == this.num_pages && this.num_pages > 0 ) {
+                this.active_page = this.num_pages-1
+              }
             })
+      },
+      assignAstrosToPages(){
+        let astro_ids = this.astronauts.map(astro=>astro.id)
+        this.num_pages = Math.ceil(astro_ids.length/this.max_rows);
+          for (let i = 0; i < this.num_pages; i++) {
+              for (let j = 0; j < this.max_rows; j++) {
+                this.astro_id_to_page[astro_ids.shift()] = i
+              }
+          }
+      },
+      changePage(n){
+        this.active_page = n-1;
+      },
+      pageForward(){
+        if (this.active_page < this.num_pages-1){
+          this.active_page++;
+        }
+      },
+      pageBackward(){
+        if (this.active_page > 0){
+          this.active_page--;
+        }
       }
     },
     computed: {
@@ -128,6 +162,7 @@ export default {
     beforeMount(){
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {
             this.astronauts = response.data
+            this.assignAstrosToPages()
         })
     }
   };
