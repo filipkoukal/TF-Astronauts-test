@@ -107,7 +107,7 @@ import moment from "moment"
 
   export default {
     name: "AstronautModal",
-    emits: ["refreshList"],
+    emits: ["refreshList", "refreshSort"],
     components: {
       DeleteAstronautModal
     },
@@ -195,7 +195,8 @@ import moment from "moment"
                       this.astronaut.date_of_birth = this.edited_astronaut.date_of_birth
                       this.astronaut.superpower = this.edited_astronaut.superpower
                       this.astronaut.updatedAt = moment.utc()
-                      this.editModeToggle()
+                      this.$emit("refreshSort")
+                      this.editModeToggle() 
                   }) 
         }
       },
