@@ -103,10 +103,11 @@
 import * as api from "../../constants/api";
 import DeleteAstronautModal from "./deleteAstronautModal.vue"
 import { formatTimePretty } from "../../helpers/generalHelper.js"
+import moment from "moment"
 
   export default {
     name: "AstronautModal",
-    emits: ["refreshList"],
+    emits: ["refreshList", "refreshSort"],
     components: {
       DeleteAstronautModal
     },
@@ -193,7 +194,9 @@ import { formatTimePretty } from "../../helpers/generalHelper.js"
                       this.astronaut.last_name = this.edited_astronaut.last_name
                       this.astronaut.date_of_birth = this.edited_astronaut.date_of_birth
                       this.astronaut.superpower = this.edited_astronaut.superpower
-                      this.editModeToggle()
+                      this.astronaut.updatedAt = moment.utc()
+                      this.$emit("refreshSort")
+                      this.editModeToggle() 
                   }) 
         }
       },

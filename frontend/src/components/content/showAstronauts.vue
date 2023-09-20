@@ -11,10 +11,21 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead class="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">First name</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last name</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date of birth</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Superpower</th>
+                    <th @click="sortAstronauts('first_name')" scope="col" :class="{'text-gray-800 font-medium' : sort_helper['first_name'] != 'inactive', 'text-gray-500' : sort_helper['first_name'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">First name 
+                        <i :class="{'pi-angle-down': sort_helper['first_name'] == 'desc' || sort_helper['first_name'] == 'inactive', 'pi-angle-up': sort_helper['first_name'] == 'asc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
+                    <th @click="sortAstronauts('last_name')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['last_name'] != 'inactive', 'text-gray-500' : sort_helper['last_name'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Last name
+                      <i :class="{'pi-angle-down': sort_helper['last_name'] == 'desc' || sort_helper['last_name'] == 'inactive', 'pi-angle-up': sort_helper['last_name'] == 'asc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
+                    <th @click="sortAstronauts('date_of_birth')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['date_of_birth'] != 'inactive', 'text-gray-500' : sort_helper['date_of_birth'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Date of birth
+                      <i :class="{'pi-angle-down': sort_helper['date_of_birth'] == 'desc' || sort_helper['date_of_birth'] == 'inactive', 'pi-angle-up': sort_helper['date_of_birth'] == 'asc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
+                    <th @click="sortAstronauts('updatedAt')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['updatedAt'] != 'inactive', 'text-gray-500' : sort_helper['updatedAt'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Last updated
+                      <i :class="{'pi-angle-down': sort_helper['updatedAt'] == 'desc' || sort_helper['updatedAt'] == 'inactive', 'pi-angle-up': sort_helper['updatedAt'] == 'asc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
+                    <th @click="sortAstronauts('superpower')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['superpower'] != 'inactive', 'text-gray-500' : sort_helper['superpower'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Superpower
+                      <i :class="{'pi-angle-down': sort_helper['superpower'] == 'desc' || sort_helper['superpower'] == 'inactive', 'pi-angle-up': sort_helper['superpower'] == 'asc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"></th>
 
                   </tr>
@@ -63,7 +74,7 @@
 
 
 
-<AstronautModal ref="astroModal" @refreshList="refreshList"/>
+<AstronautModal ref="astroModal" @refreshList="refreshList" @refreshSort="refreshSort"/>
 <CreateAstronautModal ref="createAstroModal" @refreshList="refreshList"/>
 
 </template>
@@ -96,7 +107,18 @@ export default {
         max_rows: 4,
         astro_id_to_page:{},
         active_page: 0,
-        num_pages: 0
+        num_pages: 0,
+        sort_helper: {
+          first_name : "inactive",
+          last_name : "inactive",
+          date_of_birth: "inactive",
+          superpower: "inactive",
+          updatedAt : "inactive"
+        },
+        current_sort: {
+          col: "",
+          type: ""
+        }
       }
     },
     methods:{
@@ -154,15 +176,59 @@ export default {
         if (this.active_page > 0){
           this.active_page--;
         }
+      },
+      sortAstronauts(key){
+        let method = "desc"
+        if (this.sort_helper[key] == "desc") {
+          method = "asc"
+        }
+        if(key == "updatedAt"){
+          this.astronauts.sort((a, b) => {
+              return new Date(a[key]) - new Date((b[key]));
+          });
+        } else {
+          this.astronauts.sort((a, b) => {
+              return a[key].localeCompare(b[key]);
+          });
+        }
+
+        if (method == "desc"){
+          this.astronauts.reverse()
+        }
+        this.sort_helper.first_name = "inactive"
+        this.sort_helper.last_name = "inactive"
+        this.sort_helper.superpower = "inactive"
+        this.sort_helper.updatedAt = "inactive"
+        this.sort_helper.date_of_birth = "inactive"
+        this.sort_helper[key] = method
+        this.current_sort.col = key
+        this.current_sort.type = method
+        this.assignAstrosToPages()
+      },
+      refreshSort(){
+        if(this.current_sort.col == "updatedAt"){
+          this.astronauts.sort((a, b) => {
+              return new Date(a[this.current_sort.col ]) - new Date((b[this.current_sort.col ]));
+          });
+        } else {
+          this.astronauts.sort((a, b) => {
+              return a[this.current_sort.col ].localeCompare(b[this.current_sort.col ]);
+          });
+        }
+        if (this.current_sort.type == "desc"){
+          this.astronauts.reverse()
+        }
+        this.assignAstrosToPages()
       }
     },
+
     computed: {
 
     },
     beforeMount(){
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {
             this.astronauts = response.data
-            this.assignAstrosToPages()
+            this.sortAstronauts("updatedAt")
         })
     }
   };
