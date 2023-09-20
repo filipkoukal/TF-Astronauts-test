@@ -20,6 +20,9 @@
                     <th @click="sortAstronauts('date_of_birth')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['date_of_birth'] != 'inactive', 'text-gray-500' : sort_helper['date_of_birth'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Date of birth
                       <i :class="{'pi-angle-down': sort_helper['date_of_birth'] == 'asc' || sort_helper['date_of_birth'] == 'inactive', 'pi-angle-up': sort_helper['date_of_birth'] == 'desc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
                     </th>
+                    <th @click="sortAstronauts('updatedAt')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['updatedAt'] != 'inactive', 'text-gray-500' : sort_helper['updatedAt'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Last updated
+                      <i :class="{'pi-angle-down': sort_helper['updatedAt'] == 'asc' || sort_helper['updatedAt'] == 'inactive', 'pi-angle-up': sort_helper['updatedAt'] == 'desc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
+                    </th>
                     <th @click="sortAstronauts('superpower')" scope="col"  :class="{'text-gray-800 font-medium' : sort_helper['superpower'] != 'inactive', 'text-gray-500' : sort_helper['superpower'] == 'inactive'}" class="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer transition duration-100 ease-out hover:text-gray-800 hover:font-medium">Superpower
                       <i :class="{'pi-angle-down': sort_helper['superpower'] == 'asc' || sort_helper['superpower'] == 'inactive', 'pi-angle-up': sort_helper['superpower'] == 'desc'}" class="group-hover:opacity-100 opacity-0 pi transition duration-100 ease-out relative top-0.5"></i>
                     </th>
@@ -175,9 +178,16 @@ export default {
         if (this.sort_helper[key] == "inactive" || this.sort_helper[key] == "asc") {
           method = "desc"
         }
-        this.astronauts.sort((a, b) => {
-            return a[key].localeCompare(b[key]);
-        });
+        if(key == "updatedAt"){
+          this.astronauts.sort((a, b) => {
+              return new Date(a[key]) - new Date((b[key]));
+          });
+        } else {
+          this.astronauts.sort((a, b) => {
+              return a[key].localeCompare(b[key]);
+          });
+        }
+
         if (method == "asc"){
           this.astronauts.reverse()
         }
