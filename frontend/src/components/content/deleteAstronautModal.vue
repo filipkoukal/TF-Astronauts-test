@@ -39,7 +39,7 @@ import * as api from "../../constants/api";
 
 export default {
   name: "DeleteAstronautModal",
-  emits: ["deletedAstronaut"],
+  emits: ["deletedAstronaut", "errorToast"],
   data() {
     return {
       isOpen: false,
@@ -60,18 +60,19 @@ export default {
     },
 
     deleteAstronaut(){
-
         this.axios.delete(api.DELETE_ASTRONAUT+this.astronaut.id).then(() => {
             this.isOpen = !this.isOpen;
             this.$emit("deletedAstronaut");
-        })
+        }).catch(() => {
+            this.$emit("errorToast")
+          }) 
 
     }
 
   }
 };
 </script>
-<style>
+<style scope lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }

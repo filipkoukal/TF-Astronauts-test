@@ -96,7 +96,7 @@
         </div>
     </Transition>
 
-  <DeleteAstronautModal ref="deleteAstroModal" @deletedAstronaut="deletedAstronaut"/>
+  <DeleteAstronautModal ref="deleteAstroModal" @deletedAstronaut="deletedAstronaut" @errorToast="errorToast"/>
 </template>
   
 <script>
@@ -107,7 +107,7 @@ import moment from "moment"
 
   export default {
     name: "AstronautModal",
-    emits: ["refreshList", "refreshSort"],
+    emits: ["refreshList", "refreshSort", "errorToast"],
     components: {
       DeleteAstronautModal
     },
@@ -148,7 +148,7 @@ import moment from "moment"
       },
       deletedAstronaut(){
         this.isOpen = !this.isOpen;
-        this.$emit("refreshList")
+        this.$emit("refreshList", "delete")
       },
       editModeToggle(){
         this.resetErrors()
@@ -195,13 +195,18 @@ import moment from "moment"
                       this.astronaut.date_of_birth = this.edited_astronaut.date_of_birth
                       this.astronaut.superpower = this.edited_astronaut.superpower
                       this.astronaut.updatedAt = moment.utc()
-                      this.$emit("refreshSort")
+                      this.$emit("refreshSort", "edit")
                       this.editModeToggle() 
-                  }) 
+                  }).catch(() => {
+                      this.errorToast()
+                    }) 
         }
       },
       formatTime(time, delimeter){
         return formatTimePretty(time, delimeter);
+      },
+      errorToast(){
+        this.$emit("errorToast")
       }
     },
   };

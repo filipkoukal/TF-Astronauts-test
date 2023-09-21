@@ -16,18 +16,20 @@ import moment from "moment"
 export default {
     name: "AstronautRow",
     props: ['astronaut'],
-
+    data(){
+        return {
+            formated_updatedAt: "",
+            interval: null
+        }
+    },
     methods:{
         formatTime(time, delimeter){
             return formatTimePretty(time, delimeter);
         },
         formatTimestamp(time){
-            return moment(time).utcOffset(time).fromNow()
+            return moment(time).utcOffset(time).fromNow()           
         }
-    },
-    computed: {
-
-    },
+    }
 };
 
 </script>
