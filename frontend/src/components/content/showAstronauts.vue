@@ -74,8 +74,9 @@
 
 
 
-<AstronautModal ref="astroModal" @refreshList="refreshList" @refreshSort="refreshSort"/>
-<CreateAstronautModal ref="createAstroModal" @refreshList="refreshList"/>
+<AstronautModal ref="astroModal" @refreshList="refreshList" @refreshSort="refreshSort" @errorToast="errorToast"/>
+<CreateAstronautModal ref="createAstroModal" @refreshList="refreshList" @errorToast="errorToast"/>
+<Toasts ref="toasts"/>
 
 </template>
 
@@ -91,6 +92,7 @@ import AstronautRow from "./astronautRow.vue"
 import AstronautModal from "./astronautModal.vue"
 import CreateButton from "./createAstronautButton.vue"
 import CreateAstronautModal from "./createAstronautModal.vue"
+import Toasts from "./toasts.vue"
 import { recursiveFindIndex, recursiveFindItem } from "../../helpers/generalHelper.js"
 
 export default {
@@ -99,7 +101,8 @@ export default {
       AstronautRow,
       AstronautModal,
       CreateButton,
-      CreateAstronautModal
+      CreateAstronautModal,
+      Toasts
     },
     data(){
       return{
@@ -128,7 +131,7 @@ export default {
       toggleCreateAstroModal(){
         this.$refs.createAstroModal.onToggle();
       },
-      refreshList(){
+      refreshList(toast_type){
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {
             let new_astronauts = response.data
             let new_ids = new_astronauts.map(new_astro=>new_astro.id)
@@ -148,12 +151,14 @@ export default {
               this.astronauts.push(new_astro[0]);
             });
 
-            // refresh page list and check if last page is empty
-            this.assignAstrosToPages()
+            this.refreshSort(toast_type)
+            // check if last page is empty
             if (this.active_page == this.num_pages && this.num_pages > 0 ) {
                 this.active_page = this.num_pages-1
               }
-            })
+          }).catch(() => {
+            this.errorToast()
+          })
       },
       assignAstrosToPages(){
         let astro_ids = this.astronauts.map(astro=>astro.id)
@@ -205,20 +210,30 @@ export default {
         this.current_sort.type = method
         this.assignAstrosToPages()
       },
-      refreshSort(){
+      refreshSort(toast_type){
         if(this.current_sort.col == "updatedAt"){
           this.astronauts.sort((a, b) => {
               return new Date(a[this.current_sort.col ]) - new Date((b[this.current_sort.col ]));
           });
         } else {
           this.astronauts.sort((a, b) => {
-              return a[this.current_sort.col ].localeCompare(b[this.current_sort.col ]);
+              return a[this.current_sort.col].localeCompare(b[this.current_sort.col ]);
           });
         }
         if (this.current_sort.type == "desc"){
           this.astronauts.reverse()
         }
         this.assignAstrosToPages()
+        // fire toast if toast_type not empty
+        if (toast_type){
+          this.fireToast(toast_type)
+        }
+      },
+      fireToast(type){
+        this.$refs.toasts.fireToast(type)
+      },
+      errorToast(){
+        this.fireToast("error")
       }
     },
 
@@ -229,6 +244,8 @@ export default {
         this.axios.get(api.GET_ASTRONAUTS).then((response) => {
             this.astronauts = response.data
             this.sortAstronauts("updatedAt")
+        }).catch(() => {
+          this.errorToast()
         })
     }
   };

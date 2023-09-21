@@ -85,7 +85,7 @@ import * as api from "../../constants/api";
 
   export default {
     name: "CreateAstronautModal",
-    emits: ["refreshList"],
+    emits: ["refreshList", "errorToast"],
     data() {
       return {
         isOpen: false,
@@ -152,14 +152,16 @@ import * as api from "../../constants/api";
                       superpower: this.new_astronaut.superpower,
                   }).then(() => {
                       this.onToggle() 
-                      this.$emit("refreshList");
-                  }) 
+                      this.$emit("refreshList", "create");
+                  }).catch(() => {
+                      this.$emit("errorToast")
+                    }) 
         }
       }
     },
   };
   </script>
-  <style>
+  <style scoped lang="less">
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
   }
