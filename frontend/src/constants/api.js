@@ -1,7 +1,6 @@
 // app server routes
 const backend_address = process.env.VUE_APP_BACKEND_ADR
-const backend_port = process.env.VUE_APP_BACKEND_PORT
-const prefix = "http://" + backend_address + ":" + backend_port + "/data/"
+const prefix = "https://" + backend_address + "/data/"
 
 export const GET_ASTRONAUTS = prefix + "astronauts"
 export const CREATE_ASTRONAUT = prefix + "create_astronaut"

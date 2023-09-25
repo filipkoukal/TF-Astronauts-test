@@ -9,7 +9,6 @@ do
   echo "Processing $file ...";
 
   sed -i 's|BACKEND_ADR_value|'${VUE_APP_BACKEND_ADR}'|g' $file 
-  sed -i 's|BACKEND_PORT_value|'${VUE_APP_BACKEND_PORT}'|g' $file
 
 done
 
