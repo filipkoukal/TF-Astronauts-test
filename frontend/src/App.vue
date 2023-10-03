@@ -10,8 +10,6 @@ import Header from "./components/Header.vue";
 import ShowAstronauts from "./components/content/showAstronauts.vue";
 
 import * as appView from "./constants/appView";
-//import * as api from "./constants/api";
-
 
 export default {
   name: "App",
@@ -19,30 +17,26 @@ export default {
     Header,
     ShowAstronauts
   },
-  data:() => {
+  data: () => {
     return {
       timer: null
+    };
+  },
+  methods: {},
+  computed: {
+    AppState() {
+      return this.$store.getters.getAppState;
+    },
+    getActiveViewComponent() {
+      switch (this.AppState.activeView) {
+        case appView.SHOW_ASTRONAUTS:
+          return "ShowAstronauts";
+        default:
+          return "ShowAstronauts";
+      }
     }
   },
-  methods:{
-
-  },
-  computed:{
-    AppState(){
-        //console.log(this.$store.getters.getAppState)
-        return this.$store.getters.getAppState
-    },
-    getActiveViewComponent(){
-        switch (this.AppState.activeView) {
-          case appView.SHOW_ASTRONAUTS:
-            return "ShowAstronauts";
-          default:
-            return "ShowAstronauts";
-          }
-      },
-  },
-  mounted() {
-  },
+  mounted() {}
 };
 </script>
 
@@ -51,10 +45,9 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  //text-align: center;
   color: #ffffff;
-  input{
-    color:#2c3e50
+  input {
+    color: #2c3e50;
   }
 }
 .view {
