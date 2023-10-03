@@ -212,10 +212,7 @@ import moment from "moment"
   };
   </script>
   <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-  }
-  
+
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;

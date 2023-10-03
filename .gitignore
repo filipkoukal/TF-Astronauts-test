@@ -6,8 +6,9 @@
 /backend/route.rest
 .DS_Store
 /frontend/node_modules
-
-
+docker_commands.txt
+/database/local
+/backend/local
 # local env files
 .env.local
 .env.*.local

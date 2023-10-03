@@ -1,4 +1,4 @@
-{
+module.exports = {
   "development": {
     "username": "TF_Astronauti",
     "password": "ahoj",
@@ -15,10 +15,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "TF_Astronauti",
+    "password": "ahoj",
+    "database": "TF_Astronauti",
+    "host": process.env.DB_NAME,
+    "port": process.env.DB_PORT,
+    "dialect": "postgres"
   }
 }
